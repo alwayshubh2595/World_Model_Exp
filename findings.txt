@@ -1,0 +1,14 @@
+The SIGReg-regularized model keeps its rollout marginal close to N(0,I) across the full
+50-step horizon (KL of 1.48 at k=1, never exceeding 17.68, versus a steadily rising KL of up to
+87.05 for the unregularized model), confirming that the marginal constraint the regularizer was
+trained for continues to hold under autoregressive rollout. Despite this, the trajectory amplification
+ratio A_k for the SIGReg model still climbs sharply, from 1.13 at k=1 to 18.02 at k=50 -- in fact growing
+faster than the unregularized model's A_k (1.02 -> 2.78), which shows that enforcing a clean marginal does
+not constrain, and can even coexist with worse, joint trajectory-level sensitivity to perturbations.
+The latent scatter plots add a further wrinkle: at k=1 the SIGReg latents form a tight, isotropic
+blob centered near the origin, but by k=50 they have spread into a ring/diamond-shaped manifold whose
+first and second moments still happen to roughly match a standard Gaussian -- so the scalar KL-to-
+diagonal-Gaussian metric stays moderate even though the distribution's shape has visibly departed from
+Gaussian. Aggregate marginal statistics can therefore be a misleading proxy for representational health:
+they neither guarantee the marginal truly looks Gaussian at long horizons nor say anything about whether
+individual trajectories -- which have clearly fanned out across that manifold -- remain trustworthy.
